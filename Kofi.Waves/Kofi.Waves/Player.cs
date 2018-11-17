@@ -9,7 +9,10 @@ namespace Kofi.Waves
         public const char Them = 'x';
         public const char Neither = ' ';
 
-        public static char Next(char player) => player == Us ? Them : Us;
+        public static char Next(char player)
+            => player == Us
+                ? Them
+                : Us;
     }
 
     public class Board

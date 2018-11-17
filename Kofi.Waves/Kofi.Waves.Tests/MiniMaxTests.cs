@@ -15,5 +15,29 @@ namespace Kofi.Waves.Tests
             var actual = MiniMax.BestNextMove(new Board(squares));
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void CanPlayFirst()
+        {
+            const string squares = "   " +
+                                   "   " +
+                                   "   ";
+
+            const int expected = 8;
+            var actual = MiniMax.BestNextMove(new Board(squares));
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void CanPlaySecond()
+        {
+            const string squares = "   " +
+                                   "   " +
+                                   "  x";
+
+            const int expected = 7;
+            var actual = MiniMax.BestNextMove(new Board(squares));
+            Assert.Equal(expected, actual);
+        }
     }
 }
