@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Kofi.Waves
 {
@@ -21,6 +24,20 @@ namespace Kofi.Waves
         }
 
         public bool HasNoEmptySquares() => Squares.All(_ => _ != Player.Neither);
+
+        public Board AddPiece(char player, int location)
+        {
+            var newBoardState = new char[Squares.Length];
+            for (var square = 0; location < Squares.Length; square++)
+            {
+                newBoardState[square] =
+                    location == square
+                    ? player
+                    : Squares[square];
+            }
+
+            return new Board(new string(newBoardState));
+        }
     }
 
     public static class Winning
@@ -44,17 +61,54 @@ namespace Kofi.Waves
 
         public static bool HasBeenWon(Board board, char player)
         {
-            for (var i = 0; i < Winning.States.Length; i++)
+            return Winning.States.Cast<int>().Where((_, i) =>
+                i < Winning.States.Length &&
+                board.Squares[Winning.States[i, 0]] == player && 
+                board.Squares[Winning.States[i, 1]] == player && 
+                board.Squares[Winning.States[i, 2]] == player).Any();
+        }
+    }
+
+    public static class MiniMax
+    {
+        private static int GetScore(Board board, int depth)
+        {
+            if (Game.HasBeenWon(board, Player.Us))
             {
-                if (board.Squares[Winning.States[i, 0]] == player &&
-                    board.Squares[Winning.States[i, 1]] == player &&
-                    board.Squares[Winning.States[i, 2]] == player)
-                {
-                    return true;
-                }
+                return 10 - depth;
             }
 
-            return false;
+            if (Game.HasBeenWon(board, Player.Them))
+            {
+                return depth - 10;
+            }
+
+            return 0;
+        }
+
+        public static int Calculate(Board board, int depth, char player)
+        {
+            var score = GetScore(board, depth);
+            if (score != 0)
+            {
+                return score;
+            }
+
+            depth++;
+
+            var moves = new Dictionary<int, int>();
+            for (var location = 0; location < board.Squares.Length; location++)
+            {
+                if (board.Squares[location] != Player.Neither)
+                {
+                    continue;
+                }
+
+                Board played = board.AddPiece(player, location);
+
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
