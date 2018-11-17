@@ -100,11 +100,11 @@ namespace Kofi.Waves
         }
     }
 
-    public static class MiniMax
+    public class MiniMax
     {
-        public static int BestLocationForNextPiece { get; private set; }
+        private int BestLocationForNextPiece { get; set; }
 
-        public static int BestNextMove(Board board)
+        public int BestNextMove(Board board)
         {
             Calculate(board, 0, Player.Us);
 
@@ -126,7 +126,7 @@ namespace Kofi.Waves
             return 0;
         }
 
-        private static int Calculate(Board board, int depth, char player)
+        private int Calculate(Board board, int depth, char player)
         {
             if (Game.Over(board))
             {
