@@ -20,7 +20,12 @@ namespace Kofi.Waves
     {
         private const int ValidSize = 3 * 3;
 
-        private char[] ValidPieces => new[] { Player.Us, Player.Them, Player.Neither };
+        private static IEnumerable<char> ValidPieces => new[]
+        {
+            Player.Us,
+            Player.Them,
+            Player.Neither
+        };
 
         public string Squares { get; }
 
@@ -28,7 +33,22 @@ namespace Kofi.Waves
         {
             if (squares.Length != ValidSize)
             {
-                throw new ArgumentException($"invalid board with {squares.Length} squares. valid board has {ValidSize} squares");
+                var invalidSizeErrorMessage =
+                    $"invalid board with {squares.Length} squares. " +
+                    $"valid board has {ValidSize} squares";
+
+                throw new ArgumentException(invalidSizeErrorMessage);
+            }
+
+            if (squares.Any(_ => !ValidPieces.Contains(_)))
+            {
+                var invalidPieces = string.Join("", squares.Where(_ => !ValidPieces.Contains(_)).Select(_ => _.ToString()));
+                var validPieces = string.Join("", ValidPieces.Select(_ => _.ToString()));
+                var invalidPiecesErrorMessage =
+                    $"invalid board piece(s) \"{invalidPieces}\". " +
+                    $"valid board pieces are \"{validPieces}\"";
+
+                throw new ArgumentException(invalidPiecesErrorMessage);
             }
 
             Squares = squares;

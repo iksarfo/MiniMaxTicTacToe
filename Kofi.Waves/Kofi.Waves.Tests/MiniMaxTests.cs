@@ -60,5 +60,15 @@ namespace Kofi.Waves.Tests
 
             Assert.Throws<ArgumentException>(() => new Board(squares));
         }
+
+        [Fact]
+        public void InvalidPiecesRaisesException()
+        {
+            const string squares = "w x" +
+                                   " y " +
+                                   "  z";
+
+            Assert.Throws<ArgumentException>(() => new Board(squares));
+        }
     }
 }
