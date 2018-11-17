@@ -97,10 +97,9 @@ namespace Kofi.Waves
 
         private static int Calculate(Board board, int depth, char player)
         {
-            var score = GetScore(board, depth);
-            if (score != 0)
+            if (Game.Over(board))
             {
-                return score;
+                return GetScore(board, depth);
             }
 
             depth++;
