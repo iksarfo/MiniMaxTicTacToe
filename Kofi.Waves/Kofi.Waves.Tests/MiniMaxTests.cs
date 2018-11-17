@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace Kofi.Waves.Tests
 {
@@ -38,6 +39,26 @@ namespace Kofi.Waves.Tests
             const int expected = 7;
             var actual = MiniMax.BestNextMove(new Board(squares));
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void TooFewSquaresRaisesException()
+        {
+            const string squares = "   " +
+                                   "   " +
+                                   "  ";
+
+            Assert.Throws<ArgumentException>(() => new Board(squares));
+        }
+
+        [Fact]
+        public void TooManySquaresRaisesException()
+        {
+            const string squares = "    " +
+                                   "   " +
+                                   "   ";
+
+            Assert.Throws<ArgumentException>(() => new Board(squares));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Kofi.Waves
@@ -17,12 +18,19 @@ namespace Kofi.Waves
 
     public class Board
     {
-        private char[] _validPieces = new char[] { Player.Us, Player.Them, Player.Neither };
+        private const int ValidSize = 3 * 3;
+
+        private char[] ValidPieces => new[] { Player.Us, Player.Them, Player.Neither };
 
         public string Squares { get; }
 
         public Board(string squares)
         {
+            if (squares.Length != ValidSize)
+            {
+                throw new ArgumentException($"invalid board with {squares.Length} squares. valid board has {ValidSize} squares");
+            }
+
             Squares = squares;
         }
 
