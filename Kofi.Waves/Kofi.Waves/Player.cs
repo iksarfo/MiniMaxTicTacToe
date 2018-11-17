@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Kofi.Waves
@@ -30,7 +28,7 @@ namespace Kofi.Waves
         public Board AddPiece(char player, int location)
         {
             var newBoardState = new char[Squares.Length];
-            for (var square = 0; location < Squares.Length; square++)
+            for (var square = 0; square < Squares.Length; square++)
             {
                 newBoardState[square] =
                     location == square
@@ -64,7 +62,7 @@ namespace Kofi.Waves
         public static bool HasBeenWon(Board board, char player)
         {
             return Winning.States.Cast<int>().Where((_, i) =>
-                i < Winning.States.Length &&
+                i <= Winning.States.GetUpperBound(0) &&
                 board.Squares[Winning.States[i, 0]] == player && 
                 board.Squares[Winning.States[i, 1]] == player && 
                 board.Squares[Winning.States[i, 2]] == player).Any();
@@ -74,6 +72,13 @@ namespace Kofi.Waves
     public static class MiniMax
     {
         public static int BestLocationForNextPiece { get; private set; }
+
+        public static int BestNextMove(Board board)
+        {
+            Calculate(board, 0, Player.Us);
+
+            return BestLocationForNextPiece;
+        }
 
         private static int GetScore(Board board, int depth)
         {
@@ -90,7 +95,7 @@ namespace Kofi.Waves
             return 0;
         }
 
-        public static int Calculate(Board board, int depth, char player)
+        private static int Calculate(Board board, int depth, char player)
         {
             var score = GetScore(board, depth);
             if (score != 0)
