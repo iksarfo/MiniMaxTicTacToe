@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 
 namespace Kofi.Waves
 {
@@ -19,6 +19,8 @@ namespace Kofi.Waves
         {
             Squares = squares;
         }
+
+        public bool HasNoEmptySquares() => Squares.All(_ => _ != Player.Neither);
     }
 
     public static class Winning
@@ -34,5 +36,25 @@ namespace Kofi.Waves
             { 0, 4, 8 },
             { 2, 4, 6 }
         };
+    }
+
+    public class Game
+    {
+        public static bool Over(Board board) => board.HasNoEmptySquares();
+
+        public static bool HasBeenWon(Board board, char player)
+        {
+            for (var i = 0; i < Winning.States.Length; i++)
+            {
+                if (board.Squares[Winning.States[i, 0]] == player &&
+                    board.Squares[Winning.States[i, 1]] == player &&
+                    board.Squares[Winning.States[i, 2]] == player)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
