@@ -10,6 +10,8 @@ namespace Kofi.Waves
         public const char Us = 'o';
         public const char Them = 'x';
         public const char Neither = ' ';
+
+        public static char Next(char player) => player == Us ? Them : Us;
     }
 
     public class Board
@@ -71,6 +73,8 @@ namespace Kofi.Waves
 
     public static class MiniMax
     {
+        public static int BestLocationForNextPiece { get; private set; }
+
         private static int GetScore(Board board, int depth)
         {
             if (Game.HasBeenWon(board, Player.Us))
@@ -104,11 +108,19 @@ namespace Kofi.Waves
                     continue;
                 }
 
-                Board played = board.AddPiece(player, location);
-
+                var played = board.AddPiece(player, location);
+                var miniMax = Calculate(played, depth, Player.Next(player));
+                moves[miniMax] = location;
             }
 
-            throw new NotImplementedException();
+            var best =
+                player == Player.Us
+                    ? moves.Keys.Max()
+                    : moves.Keys.Min();
+
+            BestLocationForNextPiece = moves[best];
+
+            return best;
         }
     }
 }
